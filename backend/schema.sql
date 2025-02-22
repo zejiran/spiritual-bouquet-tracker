@@ -4,5 +4,6 @@ CREATE TABLE offerings (
   type TEXT NOT NULL,
   userName TEXT NOT NULL,
   comment TEXT,
+  imageUrl TEXT,
   timestamp TEXT NOT NULL
 );

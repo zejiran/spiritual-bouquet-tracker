@@ -72,6 +72,10 @@ async function validateOffering(offering: any): Promise<Offering> {
     throw new Error('Invalid user name');
   }
 
+  if (offering.imageUrl && typeof offering.imageUrl !== 'string') {
+    throw new Error('Invalid image URL format');
+  }
+
   if (offering.comment && typeof offering.comment !== 'string') {
     throw new Error('Invalid comment format');
   }
@@ -83,6 +87,7 @@ async function validateOffering(offering: any): Promise<Offering> {
   return {
     type: offering.type,
     userName: offering.userName.trim(),
+    imageUrl: offering.imageUrl?.trim() || '',
     comment: offering.comment?.trim() || '',
     timestamp: offering.timestamp,
   };
@@ -112,12 +117,13 @@ async function handleCreateOffering(request: Request, env: Env): Promise<Respons
     const offering = await validateOffering(body);
 
     const stmt = env.DB.prepare(
-      'INSERT INTO offerings (type, userName, comment, timestamp) VALUES (?, ?, ?, ?)'
+      'INSERT INTO offerings (type, userName, imageUrl, comment, timestamp) VALUES (?, ?, ?, ?, ?)'
     );
 
     const result = await stmt.bind(
       offering.type,
       offering.userName,
+      offering.imageUrl,
       offering.comment,
       offering.timestamp
     ).run();

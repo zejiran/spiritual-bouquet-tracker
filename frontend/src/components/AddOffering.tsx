@@ -4,11 +4,13 @@ import toast from 'react-hot-toast';
 import { OFFERING_TYPES } from '../constants/offerings';
 import { OfferingType } from '../types';
 import { useApi } from '../hooks/useApi';
+import { ImageUpload } from './ImageUpload';
 
 export const AddOffering: React.FC = () => {
   const [userName, setUserName] = useState<string>('');
   const [offeringType, setOfferingType] = useState<OfferingType>('eucaristia');
   const [comment, setComment] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>('');
   const { addOffering, isLoading } = useApi();
 
   useEffect(() => {
@@ -24,28 +26,22 @@ export const AddOffering: React.FC = () => {
     }
 
     try {
-      localStorage.setItem('userName', userName);
-      await addOffering({
-        type: offeringType,
-        userName,
-        comment,
-        timestamp: new Date().toISOString(),
-      });
-      setComment('');
-      toast.success('¡Ofrenda añadida exitosamente!', {
-        duration: 3000,
-        style: {
-          background: '#48BB78',
-          color: '#fff',
-        },
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('Error al guardar la ofrenda', {
-        duration: 3000,
-      });
-    }
-  };
+          localStorage.setItem('userName', userName);
+          await addOffering({
+            type: offeringType,
+            userName,
+            comment,
+            imageUrl,
+            timestamp: new Date().toISOString(),
+          });
+          setComment('');
+          setImageUrl('');
+          toast.success('¡Ofrenda añadida exitosamente!');
+        } catch (error) {
+          console.error('Error:', error);
+          toast.error('Error al guardar la ofrenda');
+        }
+      };
 
   return (
     <motion.div
@@ -98,6 +94,8 @@ export const AddOffering: React.FC = () => {
             ))}
           </div>
         </div>
+
+        <ImageUpload onImageUploaded={setImageUrl} />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">

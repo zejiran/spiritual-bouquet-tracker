@@ -191,6 +191,18 @@ export const ViewRamillete: React.FC = () => {
                   {offering.comment && (
                     <div className="mt-2 text-gray-700">{offering.comment}</div>
                   )}
+                  {offering.imageUrl && (
+                    <div className="mt-4 max-w-80">
+                      <motion.img
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        src={offering.imageUrl}
+                        alt="Ofrenda"
+                        className="rounded-lg w-full aspect-video object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </motion.div>

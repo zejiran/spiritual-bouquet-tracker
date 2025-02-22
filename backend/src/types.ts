@@ -8,6 +8,7 @@ export interface Offering {
   id?: number;
   type: string;
   userName: string;
+  imageUrl: string;
   comment: string;
   timestamp: string;
 }

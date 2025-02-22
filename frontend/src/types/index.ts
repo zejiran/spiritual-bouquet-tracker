@@ -2,6 +2,7 @@ export interface Offering {
   id?: string;
   type: OfferingType;
   userName: string;
+  imageUrl?: string;
   comment?: string;
   timestamp: string;
 }
