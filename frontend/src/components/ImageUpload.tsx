@@ -53,7 +53,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     onImageUploaded('');
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     fileInputRef.current?.click();
   };
 
@@ -65,6 +66,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         </label>
         {preview && (
           <button
+            type="button"
             onClick={handleRemove}
             className="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1"
           >
@@ -102,6 +104,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               className="flex flex-col items-center justify-center w-full aspect-video rounded-lg border-2 border-dashed border-gray-300 bg-gray-50"
             >
               <button
+                type="button"
                 onClick={handleButtonClick}
                 className="flex flex-col items-center justify-center p-6 hover:bg-gray-100 rounded-lg transition-colors"
               >
