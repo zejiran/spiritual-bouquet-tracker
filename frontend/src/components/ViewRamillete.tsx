@@ -77,25 +77,57 @@ export const ViewRamillete: React.FC = () => {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="card p-8"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
-          Resumen del Ramillete
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {OFFERING_TYPES.map((type) => (
-            <AnimatedCounter
-              key={type.value}
-              value={summary[type.value]}
-              label={type.label}
-              bgColor={type.bgColor}
-              textColor={type.textColor}
-            />
-          ))}
-        </div>
-      </motion.div>
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="card p-8"
+            >
+              <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
+                Resumen del Ramillete
+              </h2>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1
+                    }
+                  }
+                }}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
+              >
+                {OFFERING_TYPES.map((type, index) => (
+                  <motion.div
+                    key={type.value}
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 20
+                      },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          type: "spring",
+                          bounce: 0.7,
+                          duration: 3
+                        }
+                      }
+                    }}
+                    custom={index}
+                  >
+                    <AnimatedCounter
+                      value={summary[type.value]}
+                      label={type.label}
+                      bgColor={type.bgColor}
+                      textColor={type.textColor}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
