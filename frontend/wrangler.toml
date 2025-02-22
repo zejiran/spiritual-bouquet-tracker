@@ -14,6 +14,3 @@ name = "spiritual-bouquet-tracker-dev"
 
 [env.preview]
 name = "spiritual-bouquet-tracker-preview"
-
-[vars]
-VITE_API_URL = "https://spiritual-bouquet-api.juanszalegria.workers.dev/api"
