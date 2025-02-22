@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { OFFERING_TYPES } from '../constants/offerings';
 import { OfferingType } from '../types';
 import { useApi } from '../hooks/useApi';
 import { ImageUpload } from './ImageUpload';
 
 export const AddOffering: React.FC = () => {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState<string>('');
   const [offeringType, setOfferingType] = useState<OfferingType>('eucaristia');
   const [comment, setComment] = useState<string>('');
@@ -37,6 +39,10 @@ export const AddOffering: React.FC = () => {
       setComment('');
       setImageUrl('');
       toast.success('¡Ofrenda añadida exitosamente!');
+
+      setTimeout(() => {
+        navigate('/view');
+      }, 1000);
     } catch (error) {
       console.error('Error:', error);
       toast.error('Error al guardar la ofrenda');
