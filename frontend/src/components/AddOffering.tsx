@@ -61,7 +61,7 @@ export const AddOffering: React.FC = () => {
           className="mb-6 animate-fade-up"
         >
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tu nombre:
+            Tu nombre
           </label>
           <input
             type="text"
