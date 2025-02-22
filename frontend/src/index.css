@@ -97,7 +97,7 @@
 
 @layer utilities {
     .animate-fade-up {
-        animation: fadeUp 0.5s var(--ease-smooth);
+        animation: fadeUp 0.2s var(--ease-smooth);
     }
 
     .animate-scale {
@@ -108,7 +108,7 @@
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;

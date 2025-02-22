@@ -50,8 +50,9 @@ export const AddOffering: React.FC = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="card max-w-lg mx-auto p-8"
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2}}
+        className="card max-w-lg mx-auto p-8"
     >
       {!localStorage.getItem('userName') && (
         <motion.div
@@ -112,7 +113,7 @@ export const AddOffering: React.FC = () => {
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.02, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
+          whileHover={{ scale: 1.04, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
           whileTap={{ scale: 0.98 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
