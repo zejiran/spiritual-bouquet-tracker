@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 import { OFFERING_TYPES } from '../constants/offerings';
 import { OfferingType } from '../types';
 import { useApi } from '../hooks/useApi';
@@ -17,7 +18,10 @@ export const AddOffering: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userName) return alert('Por favor ingresa tu nombre');
+    if (!userName) {
+      toast.error('Por favor ingresa tu nombre');
+      return;
+    }
 
     try {
       localStorage.setItem('userName', userName);
@@ -28,10 +32,18 @@ export const AddOffering: React.FC = () => {
         timestamp: new Date().toISOString(),
       });
       setComment('');
-      alert('¡Ofrenda añadida exitosamente!');
+      toast.success('¡Ofrenda añadida exitosamente!', {
+        duration: 3000,
+        style: {
+          background: '#48BB78',
+          color: '#fff',
+        },
+      });
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al guardar la ofrenda');
+      toast.error('Error al guardar la ofrenda', {
+        duration: 3000,
+      });
     }
   };
 
@@ -100,15 +112,33 @@ export const AddOffering: React.FC = () => {
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.02, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
           whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30
+          }}
           type="submit"
           disabled={isLoading}
           className={`w-full px-6 py-3 rounded-xl font-medium text-white
-            ${isLoading ? 'bg-primary-400' : 'bg-primary-500 hover:bg-primary-600'}
+            ${isLoading ? 'bg-primary-400' : 'bg-primary-500'}
             transition-all duration-200 shadow-soft hover:shadow-lg disabled:opacity-70`}
         >
-          {isLoading ? 'Añadiendo...' : 'Añadir Ofrenda'}
+          {isLoading ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center justify-center"
+            >
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+              Añadiendo...
+            </motion.div>
+          ) : (
+            'Añadir Ofrenda'
+          )}
         </motion.button>
       </form>
     </motion.div>

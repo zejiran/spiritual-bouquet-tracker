@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Toaster } from 'react-hot-toast';
 import { AddOffering } from './components/AddOffering';
 import { ViewRamillete } from './components/ViewRamillete';
 
@@ -25,6 +26,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        <Toaster position="top-center" />
         <main className="py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <motion.h1
