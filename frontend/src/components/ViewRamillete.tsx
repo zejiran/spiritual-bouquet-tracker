@@ -77,57 +77,57 @@ export const ViewRamillete: React.FC = () => {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
       <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="card p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="card p-8"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
+          Resumen del Ramillete
+        </h2>
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
+        >
+          {OFFERING_TYPES.map((type, index) => (
+            <motion.div
+              key={type.value}
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 20,
+                },
+                show: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    type: 'spring',
+                    bounce: 0.7,
+                    duration: 3,
+                  },
+                },
+              }}
+              custom={index}
             >
-              <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
-                Resumen del Ramillete
-              </h2>
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.1
-                    }
-                  }
-                }}
-                initial="hidden"
-                animate="show"
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
-              >
-                {OFFERING_TYPES.map((type, index) => (
-                  <motion.div
-                    key={type.value}
-                    variants={{
-                      hidden: {
-                        opacity: 0,
-                        y: 20
-                      },
-                      show: {
-                        opacity: 1,
-                        y: 0,
-                        transition: {
-                          type: "spring",
-                          bounce: 0.7,
-                          duration: 3
-                        }
-                      }
-                    }}
-                    custom={index}
-                  >
-                    <AnimatedCounter
-                      value={summary[type.value]}
-                      label={type.label}
-                      bgColor={type.bgColor}
-                      textColor={type.textColor}
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
+              <AnimatedCounter
+                value={summary[type.value]}
+                label={type.label}
+                bgColor={type.bgColor}
+                textColor={type.textColor}
+              />
             </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -169,40 +169,69 @@ export const ViewRamillete: React.FC = () => {
               {offerings.map((offering: Offering, index: number) => (
                 <motion.div
                   key={offering.id ?? index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-gray-50 p-6 rounded-xl hover:shadow-soft transition-all duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: index * 0.1,
+                    duration: 0.5,
+                    ease: 'easeOut',
+                  }}
+                  className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="font-bold text-lg text-gray-900">
-                      {offering.userName}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(offering.timestamp).toLocaleString('es-ES', {
-                        dateStyle: 'medium',
-                        timeStyle: 'short',
-                      })}
+                  <div className="flex flex-col md:flex-row">
+                    {offering.imageUrl && (
+                      <div className="md:w-1/4 h-48 md:h-auto relative">
+                        <motion.img
+                          initial={{ opacity: 0, scale: 1.1 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.5 }}
+                          src={offering.imageUrl}
+                          alt="Ofrenda"
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                    <div className="p-6 flex-1">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="space-y-2">
+                          <h4 className="font-bold text-lg text-gray-900">
+                            {offering.userName}
+                          </h4>
+                          <span
+                            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                              OFFERING_TYPES.find(
+                                (t) => t.value === offering.type
+                              )?.bgColor
+                            } ${
+                              OFFERING_TYPES.find(
+                                (t) => t.value === offering.type
+                              )?.textColor
+                            }`}
+                          >
+                            {
+                              OFFERING_TYPES.find(
+                                (t) => t.value === offering.type
+                              )?.label
+                            }
+                          </span>
+                        </div>
+                        <time className="text-sm text-gray-500">
+                          {new Date(offering.timestamp).toLocaleString(
+                            'es-ES',
+                            {
+                              dateStyle: 'medium',
+                              timeStyle: 'short',
+                            }
+                          )}
+                        </time>
+                      </div>
+
+                      {offering.comment && (
+                        <p className="text-gray-600 mt-4">{offering.comment}</p>
+                      )}
                     </div>
                   </div>
-                  <div className="mt-2 text-primary-600 font-medium">
-                    {OFFERING_TYPES.find((t) => t.value === offering.type)?.label}
-                  </div>
-                  {offering.comment && (
-                    <div className="mt-2 text-gray-700">{offering.comment}</div>
-                  )}
-                  {offering.imageUrl && (
-                    <div className="mt-4 max-w-80">
-                      <motion.img
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        src={offering.imageUrl}
-                        alt="Ofrenda"
-                        className="rounded-lg w-full aspect-video object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
                 </motion.div>
               ))}
             </motion.div>

@@ -1,10 +1,19 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { AddOffering } from './components/AddOffering';
 import { ViewRamillete } from './components/ViewRamillete';
 
-const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => {
+const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({
+  to,
+  children,
+}) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 

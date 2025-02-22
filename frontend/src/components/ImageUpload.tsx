@@ -8,7 +8,9 @@ interface ImageUploadProps {
   onImageUploaded: (imageUrl: string) => void;
 }
 
-export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUploaded }) => {
+export const ImageUpload: React.FC<ImageUploadProps> = ({
+  onImageUploaded,
+}) => {
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -119,9 +121,13 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUploaded }) => 
                   />
                 </svg>
                 <p className="mb-2 text-sm text-gray-500">
-                  <span className="font-semibold">Click para subir una imagen</span>
+                  <span className="font-semibold">
+                    Click para subir una imagen
+                  </span>
                 </p>
-                <p className="text-xs text-gray-500">PNG, JPG o GIF (max. 32MB)</p>
+                <p className="text-xs text-gray-500">
+                  PNG, JPG o GIF (max. 32MB)
+                </p>
               </button>
               <input
                 ref={fileInputRef}

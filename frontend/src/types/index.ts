@@ -7,7 +7,12 @@ export interface Offering {
   timestamp: string;
 }
 
-export type OfferingType = 'eucaristia' | 'rosario' | 'ayuno' | 'horaSanta' | 'otro';
+export type OfferingType =
+  | 'eucaristia'
+  | 'rosario'
+  | 'ayuno'
+  | 'horaSanta'
+  | 'otro';
 
 export interface OfferingSummary {
   [key: string]: number;
