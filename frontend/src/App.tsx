@@ -24,23 +24,23 @@ const NavLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, chil
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen">
-        <main className="flex-grow py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        <main className="py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-3xl sm:text-4xl font-bold text-center mb-8 text-blue-600"
+              className="text-4xl sm:text-5xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600"
             >
               Ramillete Espiritual para Jorge 🙏
             </motion.h1>
 
-            <nav className="mb-12 flex justify-center gap-4">
+            <nav className="mb-12 flex justify-center gap-6">
               <NavLink to="/">Añadir Ofrenda</NavLink>
               <NavLink to="/view">Ver Ramillete</NavLink>
             </nav>
 
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 animate-fade-in">
               <Routes>
                 <Route path="/" element={<AddOffering />} />
                 <Route path="/view" element={<ViewRamillete />} />
