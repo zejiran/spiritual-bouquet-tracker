@@ -12,7 +12,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
   label,
   bgColor,
-  textColor
+  textColor,
 }) => {
   const [count, setCount] = useState<number>(0);
 
@@ -25,16 +25,16 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     <motion.div
       initial={{ scale: 0.5, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      className={`${bgColor} p-6 rounded-xl text-center shadow-lg`}
+      className={`${bgColor} p-6 rounded-xl text-center shadow-soft animate-scale`}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`text-4xl font-bold ${textColor}`}
+        className={`text-4xl font-bold ${textColor} mb-1`}
       >
         {count}
       </motion.div>
-      <div className={`text-sm mt-2 ${textColor}`}>{label}</div>
+      <div className={`text-sm font-medium ${textColor}`}>{label}</div>
     </motion.div>
   );
 };

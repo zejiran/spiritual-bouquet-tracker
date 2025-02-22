@@ -5,29 +5,29 @@ export const OFFERING_TYPES: OfferingTypeConfig[] = [
     value: 'eucaristia',
     label: 'Eucaristía',
     icon: '🕊',
-    bgColor: 'bg-blue-100',
-    textColor: 'text-blue-800'
+    bgColor: 'bg-primary-100',
+    textColor: 'text-primary-800'
   },
   {
     value: 'rosario',
     label: 'Rosario',
     icon: '📿',
-    bgColor: 'bg-pink-100',
-    textColor: 'text-pink-800'
+    bgColor: 'bg-rose-100',
+    textColor: 'text-rose-800'
   },
   {
     value: 'ayuno',
     label: 'Ayuno',
     icon: '🙏',
-    bgColor: 'bg-yellow-100',
-    textColor: 'text-yellow-800'
+    bgColor: 'bg-amber-100',
+    textColor: 'text-amber-800'
   },
   {
     value: 'horaSanta',
     label: 'Hora Santa',
     icon: '⛪',
-    bgColor: 'bg-green-100',
-    textColor: 'text-green-800'
+    bgColor: 'bg-emerald-100',
+    textColor: 'text-emerald-800'
   },
   {
     value: 'otro',
