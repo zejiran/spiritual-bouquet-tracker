@@ -44,12 +44,12 @@ const App: React.FC = () => {
               transition={{ duration: 0.75 }}
               className="relative w-fit mx-auto text-4xl sm:text-5xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 leading-normal pb-1"
             >
-              Ramillete Espiritual para Jorge 🙏
+              Ramillete espiritual para Jorge 🙏
             </motion.h1>
 
             <nav className="mb-12 flex justify-center gap-6">
-              <NavLink to="/">Añadir Ofrenda</NavLink>
-              <NavLink to="/view">Ver Ramillete</NavLink>
+              <NavLink to="/">Formulario de ofrenda</NavLink>
+              <NavLink to="/view">Ver ramillete</NavLink>
             </nav>
 
             <div className="container mx-auto px-4 animate-fade-in">

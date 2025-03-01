@@ -56,6 +56,16 @@ export const AddOffering: React.FC = () => {
       transition={{ duration: 0.2 }}
       className="card max-w-lg mx-auto p-8"
     >
+      <div className="mb-6 text-center">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">
+          Formulario de ofrenda
+        </h2>
+        <p className="text-sm text-gray-600">
+          Complete los campos y presione "Enviar ofrenda" al final del
+          formulario para registrar su contribución.
+        </p>
+      </div>
+
       {!localStorage.getItem('userName') && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -78,7 +88,7 @@ export const AddOffering: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Tipo de Ofrenda
+            Tipo de ofrenda
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {OFFERING_TYPES.map((type) => (
@@ -139,10 +149,10 @@ export const AddOffering: React.FC = () => {
               className="flex items-center justify-center"
             >
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
-              Añadiendo...
+              Enviando...
             </motion.div>
           ) : (
-            'Añadir Ofrenda'
+            'Enviar ofrenda'
           )}
         </motion.button>
       </form>

@@ -82,7 +82,7 @@ export const ViewRamillete: React.FC = () => {
         className="card p-8"
       >
         <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
-          Resumen del Ramillete
+          Resumen del ramillete
         </h2>
         <motion.div
           variants={{
@@ -136,7 +136,7 @@ export const ViewRamillete: React.FC = () => {
         className="card p-8"
       >
         <h3 className="text-xl font-bold mb-6 gradient-text">
-          Registro de Ofrendas
+          Registro de ofrendas
         </h3>
 
         <AnimatePresence mode="wait">
