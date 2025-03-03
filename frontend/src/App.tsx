@@ -48,8 +48,8 @@ const App: React.FC = () => {
             </motion.h1>
 
             <nav className="mb-12 flex justify-center gap-6">
-              <NavLink to="/">Formulario de ofrenda</NavLink>
-              <NavLink to="/view">Ver ramillete</NavLink>
+              <NavLink to="/">Formulario</NavLink>
+              <NavLink to="/view">Ramillete</NavLink>
             </nav>
 
             <div className="container mx-auto px-4 animate-fade-in">
