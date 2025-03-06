@@ -1,4 +1,5 @@
-import { Env, Offering } from './types';
+import { Env, Offering, Recipient } from './types';
+import { v4 as uuidv4 } from 'uuid';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': 'https://spiritual-bouquet-tracker.pages.dev',
@@ -19,18 +20,29 @@ export default {
 
     try {
       const url = new URL(request.url);
+      const pathParts = url.pathname.split('/').filter(Boolean);
 
-      if (url.pathname === '/api/offerings') {
-        switch (request.method) {
-          case 'GET':
-            return await handleGetOfferings(env);
-          case 'POST':
-            return await handleCreateOffering(request, env);
-          default:
-            return new Response('Method Not Allowed', {
-              status: 405,
-              headers: corsHeaders,
-            });
+      if (url.pathname === '/api/recipients' && request.method === 'POST') {
+        return await handleCreateRecipient(request, env);
+      }
+
+      else if (pathParts.length === 3 && pathParts[0] === 'api' && pathParts[1] === 'recipients') {
+        const recipientId = pathParts[2];
+        return await handleGetRecipient(recipientId, env);
+      }
+
+      else if (pathParts.length === 4 && pathParts[0] === 'api' && pathParts[1] === 'recipients' && pathParts[3] === 'offerings') {
+        const recipientId = pathParts[2];
+
+        const recipientResponse = await getRecipientById(recipientId, env);
+        if (!recipientResponse.recipient) {
+          return createErrorResponse('Recipient not found', 404);
+        }
+
+        if (request.method === 'GET') {
+          return await handleGetOfferings(recipientId, env);
+        } else if (request.method === 'POST') {
+          return await handleCreateOffering(recipientId, request, env);
         }
       }
 
@@ -56,6 +68,22 @@ export default {
     }
   },
 };
+
+function createErrorResponse(message: string, status = 400, error = 'Bad Request'): Response {
+  return new Response(
+    JSON.stringify({
+      error,
+      message,
+    }),
+    {
+      status,
+      headers: {
+        'Content-Type': 'application/json',
+        ...corsHeaders,
+      },
+    }
+  );
+}
 
 async function validateOffering(offering: any): Promise<Offering> {
   const validTypes = ['eucaristia', 'rosario', 'ayuno', 'horaSanta', 'otro'];
@@ -90,14 +118,15 @@ async function validateOffering(offering: any): Promise<Offering> {
     imageUrl: offering.imageUrl?.trim() || '',
     comment: offering.comment?.trim() || '',
     timestamp: offering.timestamp,
+    recipientId: offering.recipientId || ''
   };
 }
 
-async function handleGetOfferings(env: Env): Promise<Response> {
+async function handleGetOfferings(recipientId: string, env: Env): Promise<Response> {
   try {
     const { results } = await env.DB.prepare(
-      'SELECT * FROM offerings ORDER BY timestamp DESC'
-    ).all();
+      'SELECT * FROM offerings WHERE recipient_id = ? ORDER BY timestamp DESC'
+    ).bind(recipientId).all();
 
     return new Response(JSON.stringify(results), {
       headers: {
@@ -111,13 +140,14 @@ async function handleGetOfferings(env: Env): Promise<Response> {
   }
 }
 
-async function handleCreateOffering(request: Request, env: Env): Promise<Response> {
+async function handleCreateOffering(recipientId: string, request: Request, env: Env): Promise<Response> {
   try {
     const body = await request.json();
     const offering = await validateOffering(body);
+    offering.recipientId = recipientId;
 
     const stmt = env.DB.prepare(
-      'INSERT INTO offerings (type, userName, imageUrl, comment, timestamp) VALUES (?, ?, ?, ?, ?)'
+      'INSERT INTO offerings (type, userName, imageUrl, comment, timestamp, recipient_id) VALUES (?, ?, ?, ?, ?, ?)'
     );
 
     const result = await stmt.bind(
@@ -125,7 +155,8 @@ async function handleCreateOffering(request: Request, env: Env): Promise<Respons
       offering.userName,
       offering.imageUrl,
       offering.comment,
-      offering.timestamp
+      offering.timestamp,
+      offering.recipientId
     ).run();
 
     if (!result.success) {
@@ -150,19 +181,96 @@ async function handleCreateOffering(request: Request, env: Env): Promise<Respons
     );
   } catch (error) {
     if (error instanceof Error) {
-      return new Response(
-        JSON.stringify({
-          error: 'Bad Request',
-          message: error.message,
-        }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
-        }
-      );
+      return createErrorResponse(error.message);
+    }
+    throw error;
+  }
+}
+
+async function validateRecipient(recipient: any): Promise<Recipient> {
+  if (!recipient || typeof recipient !== 'object') {
+    throw new Error('Invalid recipient data');
+  }
+
+  if (!recipient.name || typeof recipient.name !== 'string' || recipient.name.trim().length === 0) {
+    throw new Error('Invalid recipient name');
+  }
+
+  const id = recipient.id || uuidv4();
+  const createdAt = new Date().toISOString();
+
+  return {
+    id,
+    name: recipient.name.trim(),
+    createdAt
+  };
+}
+
+async function getRecipientById(recipientId: string, env: Env): Promise<{ recipient: Recipient | null }> {
+  try {
+    const recipient = await env.DB.prepare(
+      'SELECT * FROM recipients WHERE id = ?'
+    ).bind(recipientId).first();
+
+    return { recipient: recipient as Recipient | null };
+  } catch (error) {
+    console.error('Database error:', error);
+    throw new Error('Failed to fetch recipient');
+  }
+}
+
+async function handleGetRecipient(recipientId: string, env: Env): Promise<Response> {
+  try {
+    const { recipient } = await getRecipientById(recipientId, env);
+    if (!recipient) return createErrorResponse('Recipient not found', 404);
+
+    return new Response(JSON.stringify(recipient), {
+      headers: {
+        'Content-Type': 'application/json',
+        ...corsHeaders,
+      },
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    throw new Error('Failed to fetch recipient');
+  }
+}
+
+async function handleCreateRecipient(request: Request, env: Env): Promise<Response> {
+  try {
+    const body = await request.json();
+    const recipient = await validateRecipient(body);
+
+    const stmt = env.DB.prepare(
+      'INSERT INTO recipients (id, name, created_at) VALUES (?, ?, ?)'
+    );
+
+    const result = await stmt.bind(
+      recipient.id,
+      recipient.name,
+      recipient.createdAt
+    ).run();
+
+    if (!result.success) {
+      throw new Error('Failed to create recipient');
+    }
+
+    return new Response(
+      JSON.stringify({
+        message: 'Recipient created successfully',
+        recipient,
+      }),
+      {
+        status: 201,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders,
+        },
+      }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return createErrorResponse(error.message);
     }
     throw error;
   }

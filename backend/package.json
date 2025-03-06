@@ -10,5 +10,8 @@
     "@cloudflare/workers-types": "^4.20240208.0",
     "typescript": "^5.0.0",
     "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
   }
 }

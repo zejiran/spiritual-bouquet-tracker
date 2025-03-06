@@ -6,11 +6,18 @@ export interface Env {
 
 export interface Offering {
   id?: number;
+  recipientId: string;
   type: string;
   userName: string;
   imageUrl: string;
   comment: string;
   timestamp: string;
+}
+
+export interface Recipient {
+  id: string;
+  name: string;
+  createdAt: string;
 }
 
 export interface D1Result {
