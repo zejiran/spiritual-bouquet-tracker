@@ -1,5 +1,5 @@
 {
-  "name": "spiritual-bouquet-tracker",
+  "name": "@spiritual-bouquet-tracker/web",
   "private": true,
   "version": "0.0.0",
   "type": "module",

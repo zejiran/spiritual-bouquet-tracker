@@ -1,5 +1,5 @@
 {
-  "name": "spiritual-bouquet-api",
+  "name": "@spiritual-bouquet-tracker/api",
   "version": "1.0.0",
   "type": "module",
   "scripts": {

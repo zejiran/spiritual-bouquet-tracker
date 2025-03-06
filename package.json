@@ -1,0 +1,38 @@
+{
+  "name": "@spiritual-bouquet-tracker/root",
+  "version": "1.0.0",
+  "description": "A digital tool for managing collective spiritual offerings and prayers",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev:*\"",
+    "dev:web": "cd web && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "npm run build:web",
+    "build:web": "cd web && npm run build",
+    "deploy:web": "cd web && npm run build && wrangler pages deploy dist",
+    "deploy:server": "cd server && wrangler deploy",
+    "deploy": "npm run deploy:server && npm run deploy:web",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "spiritual",
+    "prayer",
+    "catholic",
+    "bouquet",
+    "react",
+    "cloudflare"
+  ],
+  "author": "Juan Alegría",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.5.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
