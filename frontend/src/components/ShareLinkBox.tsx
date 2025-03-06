@@ -38,7 +38,8 @@ export const ShareLinkBox: React.FC<ShareLinkBoxProps> = ({ shareUrl }) => {
 
   return (
     <div className="space-y-2">
-      <div className="flex items-stretch">
+      {/* Input field and copy button - hidden on mobile, visible on md and up */}
+      <div className="hidden md:flex items-stretch">
         <input
           type="text"
           readOnly
@@ -56,6 +57,16 @@ export const ShareLinkBox: React.FC<ShareLinkBoxProps> = ({ shareUrl }) => {
           )}
         </button>
       </div>
+
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={copyToClipboard}
+        className="md:hidden w-full py-2.5 px-4 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+      >
+        <ClipboardIcon className="h-5 w-5" />
+        Copiar enlace
+      </motion.button>
 
       <motion.button
         whileHover={{ scale: 1.02 }}

@@ -105,19 +105,19 @@ export const ViewRamillete: React.FC = () => {
       </div>
     );
   }
+  const totalOfferings = offerings.length;
+  const uniqueContributors = new Set(offerings.map((o) => o.userName)).size;
+  const featuredImages = offerings.filter((o) => o.imageUrl).slice(0, 7);
+  const notableComments = offerings
+    .filter((o) => o.comment && o.comment.length > 30)
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 3);
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
       <RecipientHeader recipientName={recipientName} />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="card p-8"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
-          Resumen del ramillete
-        </h2>
+      {offerings.length > 0 && (
         <motion.div
           variants={{
             hidden: { opacity: 0 },
@@ -130,42 +130,173 @@ export const ViewRamillete: React.FC = () => {
           }}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
+          className="card p-8 relative overflow-hidden"
         >
-          {OFFERING_TYPES.map((type, index) => (
-            <motion.div
-              key={type.value}
-              variants={{
-                hidden: {
-                  opacity: 0,
-                  y: 20,
+          <h2 className="text-2xl font-bold mb-6 text-center gradient-text">
+            Resumen del ramillete
+          </h2>
+          <motion.div
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
                 },
-                show: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    type: 'spring',
-                    bounce: 0.7,
-                    duration: 3,
+              },
+            }}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-sm sm:max-w-none mx-auto sm:mx-0"
+          >
+            {OFFERING_TYPES.map((type, index) => (
+              <motion.div
+                key={type.value}
+                variants={{
+                  hidden: {
+                    opacity: 0,
+                    y: 20,
                   },
-                },
-              }}
-              custom={index}
-            >
-              <AnimatedCounter
-                value={summary[type.value]}
-                label={type.label}
-                bgColor={type.bgColor}
-                textColor={type.textColor}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: 'spring',
+                      bounce: 0.7,
+                      duration: 3,
+                    },
+                  },
+                }}
+                custom={index}
+              >
+                <AnimatedCounter
+                  value={summary[type.value]}
+                  label={type.label}
+                  bgColor={type.bgColor}
+                  textColor={type.textColor}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
 
-        <div className="mt-8">
-          <ShareLinkBox shareUrl={getShareUrl()} />
-        </div>
-      </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 grid grid-cols-2 gap-4"
+          >
+            <div className="bg-violet-100 rounded-xl p-5 text-center flex flex-col justify-center items-center">
+              <div className="text-4xl font-bold text-violet-600 mb-1">
+                {totalOfferings}
+              </div>
+              <div className="text-violet-800 text-sm font-medium">
+                Total de ofrendas
+              </div>
+            </div>
+
+            <div className="bg-indigo-50 rounded-xl p-5 text-center flex flex-col justify-center items-center">
+              <div className="text-4xl font-bold text-indigo-600 mb-1">
+                {uniqueContributors}
+              </div>
+              <div className="text-indigo-900 text-sm font-medium">
+                Contribuyentes
+              </div>
+            </div>
+          </motion.div>
+
+          {featuredImages.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-8"
+            >
+              <div className="relative h-auto sm:h-48 md:h-56 rounded-xl overflow-hidden">
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 h-full">
+                  {featuredImages.map((offering, index) => (
+                    <motion.div
+                      key={offering.id ?? index}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{
+                        opacity: 1,
+                        scale: 1,
+                        transition: { delay: index * 0.2 },
+                      }}
+                      whileHover={{ scale: 1.05, zIndex: 10 }}
+                      className={`relative overflow-hidden ${
+                        index === 0 ? 'col-span-2 row-span-2' : ''
+                      } rounded-lg shadow-md transform transition duration-300`}
+                    >
+                      <img
+                        src={offering.imageUrl}
+                        alt={`Ofrenda de ${offering.userName}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {notableComments.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-8"
+            >
+              <div className="relative min-h-[120px]">
+                {notableComments.map((offering, index) => (
+                  <motion.div
+                    key={offering.id ?? `quote-${index}`}
+                    initial={{
+                      opacity: 0,
+                      x: [-60, -40, -20][index % 3],
+                      y: [20, 40, 60][index % 3],
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      y: 0,
+                      transition: {
+                        type: 'spring',
+                        stiffness: 100,
+                        damping: 20,
+                        delay: index * 0.3 + 0.5,
+                      },
+                    }}
+                    className={`bg-white p-4 rounded-xl shadow-md border-l-4 overflow-hidden ${
+                      [
+                        'border-green-500',
+                        'border-rose-500',
+                        'border-amber-500',
+                      ][index % 3]
+                    } mb-4`}
+                  >
+                    <p className="text-gray-600 italic mb-2">
+                      "{offering.comment}"
+                    </p>
+                    <p className="text-sm font-medium text-right">
+                      — {offering.userName}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          <div className="mt-8">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                Compartir ramillete
+              </h3>
+              <ShareLinkBox shareUrl={getShareUrl()} />
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -173,9 +304,20 @@ export const ViewRamillete: React.FC = () => {
         transition={{ delay: 0.2 }}
         className="card p-8"
       >
-        <h3 className="text-xl font-bold mb-6 gradient-text">
-          Registro de ofrendas
-        </h3>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-bold gradient-text">
+            Registro de ofrendas
+          </h3>
+
+          {offerings.length > 0 && (
+            <button
+              onClick={() => navigate(`/${recipientId}/add`)}
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-primary-100 text-primary-700 hover:bg-primary-200 transition-colors hidden md:block"
+            >
+              + Nueva ofrenda
+            </button>
+          )}
+        </div>
 
         <AnimatePresence mode="wait">
           {isLoading && offerings.length === 0 ? (
@@ -193,15 +335,20 @@ export const ViewRamillete: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-center py-8 text-gray-500"
+              className="text-center py-12"
             >
-              <p>No hay ofrendas registradas aún</p>
-              <button
+              <div className="text-6xl mb-4">🙏</div>
+              <p className="text-gray-600 mb-6">
+                No hay ofrendas registradas aún
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(`/${recipientId}/add`)}
-                className="mt-4 px-6 py-2 rounded-lg bg-primary-100 text-primary-700 hover:bg-primary-200 transition-colors"
+                className="px-6 py-3 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors shadow-soft font-medium"
               >
                 Añadir la primera ofrenda
-              </button>
+              </motion.button>
             </motion.div>
           ) : (
             <motion.div
@@ -216,7 +363,7 @@ export const ViewRamillete: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: index * 0.1,
+                    delay: index * 0.1 > 1 ? 1 : index * 0.1,
                     duration: 0.5,
                     ease: 'easeOut',
                   }}
@@ -224,16 +371,21 @@ export const ViewRamillete: React.FC = () => {
                 >
                   <div className="flex flex-col md:flex-row">
                     {offering.imageUrl && (
-                      <div className="md:w-1/4 h-48 md:h-auto relative">
-                        <motion.img
+                      <div className="md:w-1/4 h-48 md:h-auto relative overflow-hidden">
+                        <motion.div
                           initial={{ opacity: 0, scale: 1.1 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.5 }}
-                          src={offering.imageUrl}
-                          alt="Ofrenda"
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.4 }}
+                          className="h-full"
+                        >
+                          <img
+                            src={offering.imageUrl}
+                            alt="Ofrenda"
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </motion.div>
                       </div>
                     )}
                     <div className="p-6 flex-1">
@@ -272,16 +424,84 @@ export const ViewRamillete: React.FC = () => {
                       </div>
 
                       {offering.comment && (
-                        <p className="text-gray-600 mt-4">{offering.comment}</p>
+                        <motion.div
+                          initial={{ opacity: 0.8 }}
+                          whileHover={{ opacity: 1 }}
+                          className="mt-4"
+                        >
+                          <p className="text-gray-700 italic bg-gray-50 p-3 rounded-lg border-l-2 border-gray-300 overflow-hidden">
+                            "{offering.comment}"
+                          </p>
+                        </motion.div>
                       )}
                     </div>
                   </div>
                 </motion.div>
               ))}
+
+              {/* Scroll to top button */}
+              {offerings.length > 5 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                  className="flex justify-center mt-8"
+                >
+                  <button
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                    className="px-5 py-2 text-sm rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Volver arriba
+                  </button>
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Mobile add offering button */}
+      {offerings.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2 }}
+          className="fixed bottom-6 right-6 md:hidden z-10"
+        >
+          <button
+            onClick={() => navigate(`/${recipientId}/add`)}
+            className="w-14 h-14 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-lg hover:bg-primary-600 transition-colors"
+            aria-label="Añadir ofrenda"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 };
