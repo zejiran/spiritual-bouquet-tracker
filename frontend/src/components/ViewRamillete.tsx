@@ -1,14 +1,22 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { AnimatedCounter } from './AnimatedCounter';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom';
 import { OFFERING_TYPES } from '../constants/offerings';
 import { useApi } from '../hooks/useApi';
 import { Offering, OfferingSummary } from '../types';
+import { AnimatedCounter } from './AnimatedCounter';
+import { RecipientHeader } from './RecipientHeader';
+import { ShareLinkBox } from './ShareLinkBox';
 
 export const ViewRamillete: React.FC = () => {
-  const { getOfferings, isLoading } = useApi();
+  const navigate = useNavigate();
+  const { recipientId } = useParams<{ recipientId: string }>();
+  const { getOfferings, getRecipient, isLoading } = useApi();
   const [offerings, setOfferings] = useState<Offering[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [recipientName, setRecipientName] = useState<string>('');
+  const [isLoadingRecipient, setIsLoadingRecipient] = useState(false);
   const [summary, setSummary] = useState<OfferingSummary>({
     eucaristia: 0,
     rosario: 0,
@@ -18,8 +26,12 @@ export const ViewRamillete: React.FC = () => {
   });
 
   const fetchData = useCallback(async () => {
+    setIsLoadingRecipient(true);
     try {
-      const data = await getOfferings();
+      const recipient = await getRecipient(recipientId ?? '');
+      setRecipientName(recipient.name);
+
+      const data = await getOfferings(recipientId ?? '');
       if (!Array.isArray(data)) {
         throw new Error('Invalid data format received');
       }
@@ -44,8 +56,15 @@ export const ViewRamillete: React.FC = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error fetching data');
       console.error('Error fetching offerings:', err);
+
+      if (err instanceof Error && err.message.includes('not found')) {
+        toast.error('No se encontró el destinatario');
+        navigate('/');
+      }
+    } finally {
+      setIsLoadingRecipient(false);
     }
-  }, [getOfferings]);
+  }, [getOfferings, getRecipient, recipientId, navigate]);
 
   const isMounted = useRef(true);
   useEffect(() => {
@@ -57,6 +76,19 @@ export const ViewRamillete: React.FC = () => {
       isMounted.current = false;
     };
   }, [fetchData]);
+
+  const getShareUrl = () => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/${recipientId}`;
+  };
+
+  if (isLoadingRecipient) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -76,6 +108,8 @@ export const ViewRamillete: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
+      <RecipientHeader recipientName={recipientName} />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -127,6 +161,13 @@ export const ViewRamillete: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        <div className="mt-8">
+          <h3 className="text-lg font-medium mb-4 text-gray-700">
+            Compartir ramillete
+          </h3>
+          <ShareLinkBox shareUrl={getShareUrl()} />
+        </div>
       </motion.div>
 
       <motion.div
@@ -157,7 +198,13 @@ export const ViewRamillete: React.FC = () => {
               exit={{ opacity: 0 }}
               className="text-center py-8 text-gray-500"
             >
-              No hay ofrendas registradas aún
+              <p>No hay ofrendas registradas aún</p>
+              <button
+                onClick={() => navigate(`/${recipientId}/add`)}
+                className="mt-4 px-6 py-2 rounded-lg bg-primary-100 text-primary-700 hover:bg-primary-200 transition-colors"
+              >
+                Añadir la primera ofrenda
+              </button>
             </motion.div>
           ) : (
             <motion.div

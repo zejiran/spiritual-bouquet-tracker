@@ -1,10 +1,17 @@
 export interface Offering {
   id?: string;
+  recipientId: string;
   type: OfferingType;
   userName: string;
   imageUrl?: string;
   comment?: string;
   timestamp: string;
+}
+
+export interface Recipient {
+  id: string;
+  name: string;
+  createdAt: string;
 }
 
 export type OfferingType =
