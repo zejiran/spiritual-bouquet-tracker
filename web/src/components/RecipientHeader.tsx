@@ -27,7 +27,14 @@ export const RecipientHeader: React.FC<RecipientHeaderProps> = ({
         transition={{ duration: 0.75 }}
         className="relative w-fit mx-auto text-4xl sm:text-5xl font-bold text-center mb-9 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 leading-normal"
       >
-        Ramillete espiritual para {recipientName} 🙏
+        Ramillete espiritual{' '}
+        {recipientName.startsWith('la ') ||
+        recipientName.startsWith('el ') ||
+        recipientName.startsWith('las ') ||
+        recipientName.startsWith('los ')
+          ? 'por'
+          : 'para'}{' '}
+        {recipientName} 🙏
       </motion.h1>
       <div className="flex justify-center gap-4 mt-4">
         <button
