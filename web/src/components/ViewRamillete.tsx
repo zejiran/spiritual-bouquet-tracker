@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,91 @@ import { Offering, OfferingSummary } from '../types';
 import { AnimatedCounter } from './AnimatedCounter';
 import { RecipientHeader } from './RecipientHeader';
 import { ShareLinkBox } from './ShareLinkBox';
+
+const OfferingCard = ({
+  offering,
+  index,
+}: {
+  offering: Offering;
+  index: number;
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.2 });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{
+        delay: Math.min(index * 0.1, 0.5),
+        duration: 0.5,
+        ease: 'easeOut',
+      }}
+      className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
+    >
+      <div className="flex flex-col md:flex-row">
+        {offering.imageUrl && (
+          <div className="md:w-1/4 h-48 md:h-auto relative overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={
+                isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.1 }
+              }
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.4 }}
+              className="h-full"
+            >
+              <img
+                src={offering.imageUrl}
+                alt="Ofrenda"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </motion.div>
+          </div>
+        )}
+        <div className="p-6 flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+            <div className="space-y-2 mb-2 sm:mb-0">
+              <h4 className="font-bold text-lg text-gray-900 truncate">
+                {offering.userName}
+              </h4>
+              <span
+                className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                  OFFERING_TYPES.find((t) => t.value === offering.type)?.bgColor
+                } ${
+                  OFFERING_TYPES.find((t) => t.value === offering.type)
+                    ?.textColor
+                }`}
+              >
+                {OFFERING_TYPES.find((t) => t.value === offering.type)?.label}
+              </span>
+            </div>
+            <time className="text-sm text-gray-500 whitespace-nowrap">
+              {new Date(offering.timestamp).toLocaleString('es-ES', {
+                dateStyle: 'short',
+                timeStyle: 'short',
+              })}
+            </time>
+          </div>
+
+          {offering.comment && (
+            <motion.div
+              initial={{ opacity: 0.8 }}
+              whileHover={{ opacity: 1 }}
+              className="mt-4"
+            >
+              <p className="text-gray-700 italic bg-gray-50 p-3 rounded-lg border-l-2 border-gray-300 overflow-hidden">
+                "{offering.comment}"
+              </p>
+            </motion.div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 export const ViewRamillete: React.FC = () => {
   const navigate = useNavigate();
@@ -358,85 +443,11 @@ export const ViewRamillete: React.FC = () => {
               className="space-y-4"
             >
               {offerings.map((offering: Offering, index: number) => (
-                <motion.div
+                <OfferingCard
                   key={offering.id ?? index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: index * 0.1 > 1 ? 1 : index * 0.1,
-                    duration: 0.5,
-                    ease: 'easeOut',
-                  }}
-                  className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
-                >
-                  <div className="flex flex-col md:flex-row">
-                    {offering.imageUrl && (
-                      <div className="md:w-1/4 h-48 md:h-auto relative overflow-hidden">
-                        <motion.div
-                          initial={{ opacity: 0, scale: 1.1 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          whileHover={{ scale: 1.05 }}
-                          transition={{ duration: 0.4 }}
-                          className="h-full"
-                        >
-                          <img
-                            src={offering.imageUrl}
-                            alt="Ofrenda"
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </motion.div>
-                      </div>
-                    )}
-                    <div className="p-6 flex-1">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="space-y-2">
-                          <h4 className="font-bold text-lg text-gray-900">
-                            {offering.userName}
-                          </h4>
-                          <span
-                            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                              OFFERING_TYPES.find(
-                                (t) => t.value === offering.type
-                              )?.bgColor
-                            } ${
-                              OFFERING_TYPES.find(
-                                (t) => t.value === offering.type
-                              )?.textColor
-                            }`}
-                          >
-                            {
-                              OFFERING_TYPES.find(
-                                (t) => t.value === offering.type
-                              )?.label
-                            }
-                          </span>
-                        </div>
-                        <time className="text-sm text-gray-500">
-                          {new Date(offering.timestamp).toLocaleString(
-                            'es-ES',
-                            {
-                              dateStyle: 'medium',
-                              timeStyle: 'short',
-                            }
-                          )}
-                        </time>
-                      </div>
-
-                      {offering.comment && (
-                        <motion.div
-                          initial={{ opacity: 0.8 }}
-                          whileHover={{ opacity: 1 }}
-                          className="mt-4"
-                        >
-                          <p className="text-gray-700 italic bg-gray-50 p-3 rounded-lg border-l-2 border-gray-300 overflow-hidden">
-                            "{offering.comment}"
-                          </p>
-                        </motion.div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
+                  offering={offering}
+                  index={index}
+                />
               ))}
 
               {/* Scroll to top button */}
