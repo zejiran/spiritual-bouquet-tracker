@@ -8,19 +8,33 @@ A spiritual bouquet is a collection of prayers, sacrifices, and good works offer
 
 ## Features
 
-- Create spiritual bouquets for individuals or intentions
-- Track different types of offerings (Masses, rosaries, fasting, holy hours, etc.)
-- Share unique links to allow others to contribute their offerings
-- View summaries and statistics of all contributions
-- Responsive design that works on mobile and desktop
+- Create spiritual bouquets for individuals or intentions.
+- Track different types of offerings (Masses, rosaries, fasting, holy hours, etc.).
+- Share unique links to allow others to contribute their offerings.
+- View summaries and statistics of all contributions.
+- Responsive design that works on mobile and desktop.
+
+## Screenshots
+
+### Homepage
+[Screenshot will be placed here]
+
+### Creating a Bouquet
+[Screenshot will be placed here]
+
+### Adding an Offering
+[Screenshot will be placed here]
+
+### Viewing Offerings
+[Screenshot will be placed here]
 
 ## Local Development
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Wrangler CLI (`npm install -g wrangler`)
-- Cloudflare account
+- Node.js 18+ and npm.
+- Wrangler CLI (`npm install -g wrangler`).
+- Cloudflare account.
 
 ### Setup
 
@@ -76,7 +90,7 @@ A spiritual bouquet is a collection of prayers, sacrifices, and good works offer
 
 ### 1. Prepare your Cloudflare account
 
-1. [Sign up](https://dash.cloudflare.com/sign-up) for a Cloudflare account if you don't have one
+1. [Sign up](https://dash.cloudflare.com/sign-up) for a Cloudflare account if you don't have one.
 2. Install the Wrangler CLI:
    ```bash
    npm install -g wrangler
@@ -118,7 +132,7 @@ A spiritual bouquet is a collection of prayers, sacrifices, and good works offer
    wrangler deploy
    ```
 
-2. Note the API URL (e.g., `https://spiritual-bouquet-api.username.workers.dev`) for frontend configuration
+2. Note the API URL (e.g., `https://spiritual-bouquet-api.username.workers.dev`) for frontend configuration.
 
 ### 4. Deploy the frontend
 
@@ -161,11 +175,11 @@ A spiritual bouquet is a collection of prayers, sacrifices, and good works offer
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add some amazing feature'`).
+4. Push to the branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request.
 
 ## License
 
