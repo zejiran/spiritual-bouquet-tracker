@@ -38,7 +38,7 @@ export const CreateRecipient: React.FC = () => {
 
   const handleNavigateToView = () => {
     if (createdRecipientId) {
-      navigate(`/${createdRecipientId}/view`);
+      navigate(`/${createdRecipientId}`);
     }
   };
 

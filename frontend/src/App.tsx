@@ -18,9 +18,8 @@ const App: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/create" element={<CreateRecipient />} />
 
-                <Route path="/:recipientId/view" element={<ViewRamillete />} />
-                <Route path="/:recipientId/add" element={<AddOffering />} />
                 <Route path="/:recipientId" element={<ViewRamillete />} />
+                <Route path="/:recipientId/add" element={<AddOffering />} />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>

@@ -61,7 +61,7 @@ export const AddOffering: React.FC = () => {
       toast.success('¡Ofrenda añadida exitosamente!');
 
       setTimeout(() => {
-        navigate(`/${recipientId}/view`);
+        navigate(`/${recipientId}`);
       }, 1000);
     } catch (error) {
       console.error('Error:', error);

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 interface RecipientHeaderProps {
   recipientName: string;
@@ -10,6 +10,10 @@ export const RecipientHeader: React.FC<RecipientHeaderProps> = ({
 }) => {
   const { recipientId } = useParams<{ recipientId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAddPage = location.pathname.endsWith('/add');
+  const isViewPage = !isAddPage;
 
   return (
     <motion.div
@@ -28,13 +32,21 @@ export const RecipientHeader: React.FC<RecipientHeaderProps> = ({
       <div className="flex justify-center gap-4 mt-4">
         <button
           onClick={() => navigate(`/${recipientId}/add`)}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-primary-100 text-primary-700 hover:bg-primary-200 transition-colors"
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            isAddPage
+              ? 'bg-primary-100 text-primary-700'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
         >
           Nuevas ofrendas
         </button>
         <button
-          onClick={() => navigate(`/${recipientId}/view`)}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+          onClick={() => navigate(`/${recipientId}`)}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            isViewPage
+              ? 'bg-primary-100 text-primary-700'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
         >
           Ver ramillete
         </button>

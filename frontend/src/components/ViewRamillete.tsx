@@ -163,9 +163,6 @@ export const ViewRamillete: React.FC = () => {
         </motion.div>
 
         <div className="mt-8">
-          <h3 className="text-lg font-medium mb-4 text-gray-700">
-            Compartir ramillete
-          </h3>
           <ShareLinkBox shareUrl={getShareUrl()} />
         </div>
       </motion.div>
