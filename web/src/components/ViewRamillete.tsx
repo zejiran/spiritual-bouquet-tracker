@@ -6,6 +6,7 @@ import { OFFERING_TYPES } from '../constants/offerings';
 import { useApi } from '../hooks/useApi';
 import { Offering, OfferingSummary } from '../types';
 import { AnimatedCounter } from './AnimatedCounter';
+import { Helmet } from './Helmet';
 import { RecipientHeader } from './RecipientHeader';
 import { ShareLinkBox } from './ShareLinkBox';
 
@@ -200,6 +201,15 @@ export const ViewRamillete: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
+      {recipientName && (
+        <Helmet
+          title={`Ramillete para ${recipientName} | Ramillete Espiritual`}
+          description={`Contribuye con tus oraciones al ramillete espiritual para ${recipientName}. Ya hay ${offerings.length} ofrendas.`}
+          image={offerings.find((o) => o.imageUrl)?.imageUrl}
+          url={window.location.href}
+        />
+      )}
+
       <RecipientHeader recipientName={recipientName} />
 
       {offerings.length > 0 && (
