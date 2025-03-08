@@ -426,14 +426,28 @@ export const ViewRamillete: React.FC = () => {
               <p className="text-gray-600 mb-6">
                 No hay ofrendas registradas aún
               </p>
+
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(`/${recipientId}/add`)}
-                className="px-6 py-3 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors shadow-soft font-medium"
+                className="px-6 py-3 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors shadow-soft font-medium mb-8"
               >
                 Añadir la primera ofrenda
               </motion.button>
+
+              <div className="mt-10 max-w-sm mx-auto">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                    Compartir ramillete
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Comparte este enlace para invitar a otras personas a
+                    contribuir con sus oraciones
+                  </p>
+                  <ShareLinkBox shareUrl={getShareUrl()} />
+                </div>
+              </div>
             </motion.div>
           ) : (
             <motion.div
