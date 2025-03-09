@@ -11,7 +11,7 @@ export const OFFERING_TYPES: OfferingTypeConfig[] = [
   {
     value: 'rosario',
     label: 'Rosario',
-    icon: '📿',
+    icon: '🌹',
     bgColor: 'bg-rose-100',
     textColor: 'text-rose-800',
   },
