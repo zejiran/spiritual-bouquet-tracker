@@ -230,7 +230,15 @@ export const ViewRamillete: React.FC = () => {
     <div className="w-full max-w-5xl mx-auto space-y-8">
       {recipientName && (
         <Helmet
-          title={`Ramillete para ${recipientName} | Ramillete Espiritual`}
+          title={`Ramillete ${
+            recipientName.startsWith('la ') ||
+            recipientName.startsWith('el ') ||
+            recipientName.startsWith('las ') ||
+            recipientName.startsWith('los ') ||
+            recipientName.includes('y')
+              ? 'por'
+              : 'para'
+          } ${recipientName} | Ramillete Espiritual`}
           description={`Contribuye con tus oraciones al ramillete espiritual para ${recipientName}. Ya hay ${offerings.length} ofrendas.`}
           image={offerings.find((o) => o.imageUrl)?.imageUrl}
           url={window.location.href}

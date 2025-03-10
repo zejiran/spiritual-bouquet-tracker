@@ -24,7 +24,7 @@ export const CreateRecipient: React.FC = () => {
     try {
       const recipient = await createRecipient(recipientName);
       setCreatedRecipientId(recipient.id);
-      toast.success(`Ramillete creado para "${recipient.name}"`);
+      toast.success(`Ramillete creado: "${recipient.name}"`);
     } catch (error) {
       console.error('Error creating recipient:', error);
       toast.error('Error al crear el ramillete');
