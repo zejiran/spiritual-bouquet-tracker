@@ -1,9 +1,24 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
+  const [recentRamilletes, setRecentRamilletes] = useState<
+    { id: string; name: string; lastVisited: string }[]
+  >([]);
+
+  useEffect(() => {
+    try {
+      const recentRamilletesStr =
+        localStorage.getItem('recentRamilletes') || '[]';
+      const ramilletes = JSON.parse(recentRamilletesStr);
+      setRecentRamilletes(ramilletes);
+    } catch (error) {
+      console.error('Error loading recent ramilletes:', error);
+    }
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -25,6 +40,84 @@ export const Home: React.FC = () => {
           Un ramillete espiritual es una colección de oraciones, sacrificios y
           buenas obras ofrecidas por una intención especial o por una persona.
         </p>
+
+        {recentRamilletes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gray-50 p-6 rounded-xl text-center mb-10"
+          >
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              Ramilletes recientes
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {recentRamilletes.map((ramillete, index) => {
+                const colorSchemes = [
+                  'from-primary-50 to-primary-100 text-primary-800 border-primary-200', // Blue
+                  'from-rose-50 to-rose-100 text-rose-800 border-rose-200', // Rose
+                  'from-amber-50 to-amber-100 text-amber-800 border-amber-200', // Amber
+                  'from-emerald-50 to-emerald-100 text-emerald-800 border-emerald-200', // Emerald
+                  'from-purple-50 to-purple-100 text-purple-800 border-purple-200', // Purple
+                  'from-cyan-50 to-cyan-100 text-cyan-800 border-cyan-200', // Cyan
+                ];
+                const colorScheme = colorSchemes[index % colorSchemes.length];
+
+                return (
+                  <motion.div
+                    key={ramillete.id}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow:
+                        '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate(`/${ramillete.id}`)}
+                    className={`bg-gradient-to-br ${colorScheme} p-4 rounded-lg cursor-pointer text-left border transition-all duration-200`}
+                  >
+                    <div className="flex items-center">
+                      <div className="flex-1 min-w-0 mr-2">
+                        <h3
+                          className="font-medium truncate"
+                          title={ramillete.name}
+                        >
+                          {ramillete.name}
+                        </h3>
+                        <p className="text-xs mt-1 opacity-70 truncate">
+                          Visitado:{' '}
+                          {new Date(ramillete.lastVisited).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <svg
+                        className="h-5 w-5 opacity-60 flex-shrink-0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+            <div className="mt-3">
+              <button
+                onClick={() => {
+                  localStorage.removeItem('recentRamilletes');
+                  setRecentRamilletes([]);
+                }}
+                className="text-xs text-gray-500 hover:text-gray-700 underline mt-2"
+              >
+                Limpiar historial
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           <div className="bg-blue-50 p-6 rounded-xl">

@@ -23,11 +23,11 @@ const OfferingCard = ({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
       transition={{
         delay: Math.min(index * 0.1, 0.5),
-        duration: 0.5,
+        duration: 0.25,
         ease: 'easeOut',
       }}
       className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
@@ -152,16 +152,43 @@ export const ViewRamillete: React.FC = () => {
     }
   }, [getOfferings, getRecipient, recipientId, navigate]);
 
+  const saveToRecentRamilletes = useCallback(() => {
+    if (!recipientId || !recipientName) return;
+
+    try {
+      const recentRamilletesStr =
+        localStorage.getItem('recentRamilletes') || '[]';
+      const recentRamilletes = JSON.parse(recentRamilletesStr);
+
+      const newEntry = {
+        id: recipientId,
+        name: recipientName,
+        lastVisited: new Date().toISOString(),
+      };
+
+      const filteredRamilletes = recentRamilletes.filter(
+        (item: { id: string }) => item.id !== recipientId
+      );
+      const updatedRamilletes = [newEntry, ...filteredRamilletes].slice(0, 6);
+
+      localStorage.setItem(
+        'recentRamilletes',
+        JSON.stringify(updatedRamilletes)
+      );
+    } catch (error) {
+      console.error('Error saving to recent ramilletes:', error);
+    }
+  }, [recipientId, recipientName]);
+
   const isMounted = useRef(true);
   useEffect(() => {
-    if (isMounted.current) {
-      fetchData();
-    }
+    if (isMounted.current) fetchData();
+    if (recipientName) saveToRecentRamilletes();
 
     return () => {
       isMounted.current = false;
     };
-  }, [fetchData]);
+  }, [fetchData, recipientName, saveToRecentRamilletes]);
 
   const getShareUrl = () => {
     const baseUrl = window.location.origin;
@@ -219,7 +246,7 @@ export const ViewRamillete: React.FC = () => {
             show: {
               opacity: 1,
               transition: {
-                staggerChildren: 0.1,
+                staggerChildren: 0.01,
               },
             },
           }}
@@ -394,9 +421,9 @@ export const ViewRamillete: React.FC = () => {
       )}
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.1 }}
         className="card p-8"
       >
         <div className="flex justify-between items-center mb-6">
@@ -477,9 +504,9 @@ export const ViewRamillete: React.FC = () => {
               {/* Scroll to top button */}
               {offerings.length > 5 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1 }}
+                  transition={{ delay: 0.2 }}
                   className="flex justify-center mt-8"
                 >
                   <button

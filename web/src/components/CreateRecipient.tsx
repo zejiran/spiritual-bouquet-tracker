@@ -75,7 +75,7 @@ export const CreateRecipient: React.FC = () => {
                   value={recipientName}
                   onChange={(e) => setRecipientName(e.target.value)}
                   className="input-field"
-                  placeholder="Ej: Juan Alegría, Paz en el mundo, Sanación de María..."
+                  placeholder="Ej: Juan, la paz en el mundo, la sanación de María..."
                 />
                 <p className="text-xs text-gray-500 mt-2">
                   Puede ser el nombre de una persona o una intención específica
@@ -100,15 +100,12 @@ export const CreateRecipient: React.FC = () => {
                   <span className="font-medium">Ejemplos:</span>
                 </div>
                 <ul className="list-disc list-inside pl-1 space-y-1">
+                  <li>Una persona: "Jorge", "el hermano", "la abuela"</li>
                   <li>
-                    Una persona: "Jorge Hernández", "Tío Juan", "Abuela Ana"
+                    Una causa: "la paz mundial", "las vocaciones sacerdotales"
                   </li>
                   <li>
-                    Una causa: "La paz mundial", "Vocaciones sacerdotales"
-                  </li>
-                  <li>
-                    Una necesidad: "Sanación de Luis", "Por el fin de la
-                    pandemia"
+                    Una necesidad: "la sanación de Luis", "el fin de la guerra"
                   </li>
                 </ul>
               </div>
