@@ -2,7 +2,7 @@ import { Env, Offering, Recipient } from "./types";
 import { v4 as uuidv4 } from "uuid";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://spiritual-bouquet-tracker.pages.dev",
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };

@@ -2,6 +2,7 @@ import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AddOffering } from './components/AddOffering';
 import { CreateRecipient } from './components/CreateRecipient';
+import { Footer } from './components/Footer';
 import { Home } from './components/Home';
 import { NotFound } from './components/NotFound';
 import { ViewRamillete } from './components/ViewRamillete';
@@ -23,6 +24,8 @@ const App: React.FC = () => {
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
+
+              <Footer />
             </div>
           </div>
         </main>

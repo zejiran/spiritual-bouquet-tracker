@@ -58,11 +58,11 @@ export const CreateRecipient: React.FC = () => {
         {!createdRecipientId ? (
           <>
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-              Crear un nuevo ramillete espiritual
+              Crear un nuevo ramillete
             </h2>
             <p className="text-gray-600 mb-6 text-center">
-              Puedes crear un ramillete para una persona especial o para una
-              intención particular.
+              Puedes crear un ramillete espiritual para una persona especial o
+              para una intención particular.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
