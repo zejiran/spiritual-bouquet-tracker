@@ -81,7 +81,8 @@ export const Home: React.FC = () => {
                           className="font-medium truncate"
                           title={ramillete.name}
                         >
-                          {ramillete.name}
+                          {ramillete.name.charAt(0).toUpperCase() +
+                            ramillete.name.slice(1)}
                         </h3>
                         <p className="text-xs mt-1 opacity-70 truncate">
                           Visitado:{' '}
