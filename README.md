@@ -17,16 +17,20 @@ A spiritual bouquet is a collection of prayers, sacrifices, and good works offer
 ## Screenshots
 
 ### Homepage
+
 <img width="1567" alt="Screenshot 2025-03-06 at 4 23 39 PM" src="https://github.com/user-attachments/assets/69c5aa82-258b-4e3b-95dc-a203fc7f7008" />
 
 ### Creating a Bouquet
+
 <img width="1567" alt="Screenshot 2025-03-06 at 4 24 13 PM" src="https://github.com/user-attachments/assets/b5304b30-c42c-437a-8dd0-b33c4f6c4ca0" />
 <img width="1567" alt="Screenshot 2025-03-06 at 4 28 25 PM" src="https://github.com/user-attachments/assets/da457a8d-c93f-4343-ad1f-856ba92e88e0" />
 
 ### Adding an Offering
+
 <img width="1567" alt="Screenshot 2025-03-06 at 4 28 44 PM" src="https://github.com/user-attachments/assets/cad9f6f7-b858-40dc-8ba6-8121e1d20cf2" />
 
 ### Viewing Offerings
+
 <img width="1522" alt="Screenshot 2025-03-06 at 4 45 21 PM" src="https://github.com/user-attachments/assets/395d62bc-dd2f-4098-a5ac-085f358f1dde" />
 <img width="1522" alt="Screenshot 2025-03-06 at 4 46 16 PM" src="https://github.com/user-attachments/assets/5956a2f0-fee0-4622-8723-7f50d67ab0da" />
 

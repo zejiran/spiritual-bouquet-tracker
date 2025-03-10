@@ -1,18 +1,18 @@
 import { Env, Offering, Recipient } from "./types";
 import { v4 as uuidv4 } from "uuid";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+const corsHeaders = (env: Env) => ({
+  "Access-Control-Allow-Origin": env.CORS_ALLOWED_ORIGIN,
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
-};
+});
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (request.method === "OPTIONS") {
       return new Response(null, {
         headers: {
-          ...corsHeaders,
+          ...corsHeaders(env),
           "Access-Control-Max-Age": "86400",
         },
       });
@@ -41,7 +41,11 @@ export default {
 
         const recipientResponse = await getRecipientById(recipientId, env);
         if (!recipientResponse.recipient) {
-          return createErrorResponse("Recipient not found", 404);
+          return createErrorResponse({
+            message: "Recipient not found",
+            status: 404,
+            env,
+          });
         }
 
         if (request.method === "GET") {
@@ -53,7 +57,7 @@ export default {
 
       return new Response("Not Found", {
         status: 404,
-        headers: corsHeaders,
+        headers: corsHeaders(env),
       });
     } catch (error) {
       console.error("Error:", error);
@@ -66,7 +70,7 @@ export default {
           status: 500,
           headers: {
             "Content-Type": "application/json",
-            ...corsHeaders,
+            ...corsHeaders(env),
           },
         },
       );
@@ -74,11 +78,17 @@ export default {
   },
 };
 
-function createErrorResponse(
-  message: string,
+function createErrorResponse({
+  message,
   status = 400,
   error = "Bad Request",
-): Response {
+  env,
+}: {
+  message: string;
+  status?: number;
+  error?: string;
+  env: Env;
+}): Response {
   return new Response(
     JSON.stringify({
       error,
@@ -88,7 +98,7 @@ function createErrorResponse(
       status,
       headers: {
         "Content-Type": "application/json",
-        ...corsHeaders,
+        ...corsHeaders(env),
       },
     },
   );
@@ -149,7 +159,7 @@ async function handleGetOfferings(
     return new Response(JSON.stringify(results), {
       headers: {
         "Content-Type": "application/json",
-        ...corsHeaders,
+        ...corsHeaders(env),
       },
     });
   } catch (error) {
@@ -199,13 +209,13 @@ async function handleCreateOffering(
         status: 201,
         headers: {
           "Content-Type": "application/json",
-          ...corsHeaders,
+          ...corsHeaders(env),
         },
       },
     );
   } catch (error) {
     if (error instanceof Error) {
-      return createErrorResponse(error.message);
+      return createErrorResponse({ message: error.message, env });
     }
     throw error;
   }
@@ -258,12 +268,17 @@ async function handleGetRecipient(
 ): Promise<Response> {
   try {
     const { recipient } = await getRecipientById(recipientId, env);
-    if (!recipient) return createErrorResponse("Recipient not found", 404);
+    if (!recipient)
+      return createErrorResponse({
+        message: "Recipient not found",
+        status: 404,
+        env,
+      });
 
     return new Response(JSON.stringify(recipient), {
       headers: {
         "Content-Type": "application/json",
-        ...corsHeaders,
+        ...corsHeaders(env),
       },
     });
   } catch (error) {
@@ -301,13 +316,13 @@ async function handleCreateRecipient(
         status: 201,
         headers: {
           "Content-Type": "application/json",
-          ...corsHeaders,
+          ...corsHeaders(env),
         },
       },
     );
   } catch (error) {
     if (error instanceof Error) {
-      return createErrorResponse(error.message);
+      return createErrorResponse({ message: error.message, env });
     }
     throw error;
   }

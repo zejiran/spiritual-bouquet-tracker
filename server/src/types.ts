@@ -2,6 +2,7 @@ import { D1Database } from "@cloudflare/workers-types";
 
 export interface Env {
   DB: D1Database;
+  CORS_ALLOWED_ORIGIN: string;
 }
 
 export interface Offering {

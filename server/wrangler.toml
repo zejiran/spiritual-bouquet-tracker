@@ -6,3 +6,6 @@ compatibility_date = "2024-01-01"
 binding = "DB"
 database_name = "spiritual-bouquet-db"
 database_id = "e0d3a0c5-0e11-4859-a45c-2bd31fba2a5d"
+
+[vars]
+CORS_ALLOWED_ORIGIN = "https://spiritual-bouquet-tracker.pages.dev"
