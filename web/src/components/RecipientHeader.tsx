@@ -32,7 +32,9 @@ export const RecipientHeader: React.FC<RecipientHeaderProps> = ({
         recipientName.startsWith('el ') ||
         recipientName.startsWith('las ') ||
         recipientName.startsWith('los ') ||
-        recipientName.includes('y')
+        recipientName.includes(' y ') ||
+        recipientName.includes(' e ') ||
+        recipientName.includes(', ')
           ? 'por'
           : 'para'}{' '}
         {recipientName} 🙏

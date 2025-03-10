@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
@@ -10,8 +10,41 @@ export const CreateRecipient: React.FC = () => {
   const [createdRecipientId, setCreatedRecipientId] = useState<string | null>(
     null
   );
+  const [titlePreview, setTitlePreview] = useState<string>('');
   const { createRecipient, isLoading } = useApi();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!recipientName.trim()) {
+      setTitlePreview('');
+      return;
+    }
+
+    const nameLower = recipientName.trim().toLowerCase();
+
+    let preposition = 'para';
+
+    if (
+      nameLower.startsWith('la ') ||
+      nameLower.startsWith('el ') ||
+      nameLower.startsWith('las ') ||
+      nameLower.startsWith('los ') ||
+      nameLower.includes(' y ') ||
+      nameLower.includes(' e ') ||
+      nameLower.includes(', ')
+    ) {
+      preposition = 'por';
+    }
+
+    let cleanName = recipientName.trim();
+    if (/^por\s+/i.test(cleanName)) {
+      cleanName = cleanName.replace(/^por\s+/i, '');
+    } else if (/^para\s+/i.test(cleanName)) {
+      cleanName = cleanName.replace(/^para\s+/i, '');
+    }
+
+    setTitlePreview(`Ramillete espiritual ${preposition} ${cleanName}`);
+  }, [recipientName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +54,15 @@ export const CreateRecipient: React.FC = () => {
       return;
     }
 
+    let cleanName = recipientName.trim();
+    if (/^por\s+/i.test(cleanName)) {
+      cleanName = cleanName.replace(/^por\s+/i, '');
+    } else if (/^para\s+/i.test(cleanName)) {
+      cleanName = cleanName.replace(/^para\s+/i, '');
+    }
+
     try {
-      const recipient = await createRecipient(recipientName);
+      const recipient = await createRecipient(cleanName);
       setCreatedRecipientId(recipient.id);
       toast.success(`Ramillete creado: "${recipient.name}"`);
     } catch (error) {
@@ -82,6 +122,34 @@ export const CreateRecipient: React.FC = () => {
                   por la que se ofrecerán las oraciones.
                 </p>
               </div>
+
+              {titlePreview && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="bg-blue-50 rounded-lg p-4"
+                >
+                  <p className="text-sm font-medium text-blue-700 mb-1">
+                    Vista previa del título:
+                  </p>
+                  <div className="text-lg font-bold text-blue-900 py-2 px-3 bg-white bg-opacity-50 rounded-lg border border-blue-100">
+                    {titlePreview} 🙏
+                  </div>
+                  <p className="text-xs text-blue-600 mt-2">
+                    Elegimos automáticamente "para" o "por" según el contexto.
+                    Si la preposición no es la correcta o encuentras algún
+                    error, por favor repórtalo a Telegram:{' '}
+                    <a
+                      href="https://t.me/juanszalegria"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium underline hover:text-blue-800 transition-colors"
+                    >
+                      @juanszalegria
+                    </a>
+                  </p>
+                </motion.div>
+              )}
 
               <div className="bg-blue-50 rounded-lg p-4 text-sm text-blue-700">
                 <div className="flex items-center mb-2">
