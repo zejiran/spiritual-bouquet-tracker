@@ -26,7 +26,8 @@ export const RecipientHeader: React.FC<RecipientHeaderProps> = ({
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.75 }}
-        className="relative w-fit mx-auto text-4xl sm:text-5xl font-bold text-center mb-9 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 leading-normal"
+        onClick={() => navigate('/')}
+        className="relative w-fit mx-auto text-4xl sm:text-5xl font-bold text-center mb-9 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 leading-normal cursor-default"
       >
         {formatRamilleteTitle(recipientName)} 🙏
       </motion.h1>
