@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
-import {
-  cleanRecipientName,
-  determineSpanishPreposition,
-  formatNameAfterPreposition,
-  formatRamilleteTitle,
-} from '../utils/stringUtils';
+import { cleanRecipientName, formatRamilleteTitle } from '../utils/stringUtils';
 import { ShareLinkBox } from './ShareLinkBox';
 
 export const CreateRecipient: React.FC = () => {
@@ -41,9 +36,7 @@ export const CreateRecipient: React.FC = () => {
     try {
       const recipient = await createRecipient(cleanName);
       setCreatedRecipientId(recipient.id);
-      toast.success(
-        `Ramillete creado ${determineSpanishPreposition(cleanName)} ${formatNameAfterPreposition(cleanName)}`
-      );
+      toast.success(`Ramillete creado por ${cleanName}`);
     } catch (error) {
       console.error('Error creating recipient:', error);
       toast.error('Error al crear el ramillete');
@@ -81,7 +74,7 @@ export const CreateRecipient: React.FC = () => {
             </h2>
             <p className="text-gray-600 mb-6 text-center">
               Puedes crear un ramillete espiritual para una persona especial o
-              para una intención particular.
+              por una intención particular.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -115,9 +108,8 @@ export const CreateRecipient: React.FC = () => {
                     {titlePreview} 🙏
                   </div>
                   <p className="text-xs text-blue-600 mt-2">
-                    Elegimos automáticamente "para" o "por" según el contexto.
-                    Si la preposición no es la correcta o encuentras algún
-                    error, por favor repórtalo a Telegram:{' '}
+                    Si encuentras algún error o dificultad en la generación de
+                    títulos, por favor repórtalo a Telegram:{' '}
                     <a
                       href="https://t.me/juanszalegria"
                       target="_blank"
@@ -190,10 +182,8 @@ export const CreateRecipient: React.FC = () => {
                 ¡Ramillete creado!
               </h2>
               <p className="text-gray-600 mb-2">
-                El ramillete{' '}
-                {determineSpanishPreposition(cleanRecipientName(recipientName))}{' '}
-                "{formatNameAfterPreposition(recipientName)}" ha sido creado
-                exitosamente.
+                El ramillete por "{cleanRecipientName(recipientName)}" ha sido
+                creado exitosamente.
               </p>
               <p className="text-gray-600">
                 Comparte este enlace para que otros contribuyan con sus

@@ -42,7 +42,7 @@ export const Home: React.FC = () => {
 
         <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
           Un ramillete espiritual es una colección de oraciones, sacrificios y
-          buenas obras ofrecidas por una intención especial o por una persona.
+          buenas obras ofrecidas por una intención especial.
         </p>
 
         {recentRamilletes.length > 0 && (
@@ -130,8 +130,7 @@ export const Home: React.FC = () => {
               Crear un nuevo ramillete
             </h3>
             <p className="text-gray-600 mb-4">
-              Crea un ramillete espiritual para una intención especial o para
-              una persona.
+              Crea un ramillete espiritual por una persona o intención especial.
             </p>
             <p className="text-gray-600 mb-6">
               Una vez creado, podrás compartir el enlace para que otros se unan
