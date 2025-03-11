@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  formatNameForStandalone,
+  formatRamilleteTitle,
+} from '../utils/stringUtils';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -79,10 +83,9 @@ export const Home: React.FC = () => {
                       <div className="flex-1 min-w-0 mr-2">
                         <h3
                           className="font-medium truncate"
-                          title={ramillete.name}
+                          title={formatRamilleteTitle(ramillete.name)}
                         >
-                          {ramillete.name.charAt(0).toUpperCase() +
-                            ramillete.name.slice(1)}
+                          {formatNameForStandalone(ramillete.name)}
                         </h3>
                         <p className="text-xs mt-1 opacity-70 truncate">
                           Visitado:{' '}

@@ -3,6 +3,12 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
+import {
+  cleanRecipientName,
+  determineSpanishPreposition,
+  formatNameAfterPreposition,
+  formatRamilleteTitle,
+} from '../utils/stringUtils';
 import { ShareLinkBox } from './ShareLinkBox';
 
 export const CreateRecipient: React.FC = () => {
@@ -20,30 +26,7 @@ export const CreateRecipient: React.FC = () => {
       return;
     }
 
-    const nameLower = recipientName.trim().toLowerCase();
-
-    let preposition = 'para';
-
-    if (
-      nameLower.startsWith('la ') ||
-      nameLower.startsWith('el ') ||
-      nameLower.startsWith('las ') ||
-      nameLower.startsWith('los ') ||
-      nameLower.includes(' y ') ||
-      nameLower.includes(' e ') ||
-      nameLower.includes(', ')
-    ) {
-      preposition = 'por';
-    }
-
-    let cleanName = recipientName.trim();
-    if (/^por\s+/i.test(cleanName)) {
-      cleanName = cleanName.replace(/^por\s+/i, '');
-    } else if (/^para\s+/i.test(cleanName)) {
-      cleanName = cleanName.replace(/^para\s+/i, '');
-    }
-
-    setTitlePreview(`Ramillete espiritual ${preposition} ${cleanName}`);
+    setTitlePreview(`${formatRamilleteTitle(recipientName)}`);
   }, [recipientName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,17 +37,13 @@ export const CreateRecipient: React.FC = () => {
       return;
     }
 
-    let cleanName = recipientName.trim();
-    if (/^por\s+/i.test(cleanName)) {
-      cleanName = cleanName.replace(/^por\s+/i, '');
-    } else if (/^para\s+/i.test(cleanName)) {
-      cleanName = cleanName.replace(/^para\s+/i, '');
-    }
-
+    const cleanName = cleanRecipientName(recipientName);
     try {
       const recipient = await createRecipient(cleanName);
       setCreatedRecipientId(recipient.id);
-      toast.success(`Ramillete creado: "${recipient.name}"`);
+      toast.success(
+        `Ramillete creado ${determineSpanishPreposition(cleanName)} ${formatNameAfterPreposition(cleanName)}`
+      );
     } catch (error) {
       console.error('Error creating recipient:', error);
       toast.error('Error al crear el ramillete');
@@ -211,7 +190,10 @@ export const CreateRecipient: React.FC = () => {
                 ¡Ramillete creado!
               </h2>
               <p className="text-gray-600 mb-2">
-                El ramillete para "{recipientName}" ha sido creado exitosamente.
+                El ramillete{' '}
+                {determineSpanishPreposition(cleanRecipientName(recipientName))}{' '}
+                "{formatNameAfterPreposition(recipientName)}" ha sido creado
+                exitosamente.
               </p>
               <p className="text-gray-600">
                 Comparte este enlace para que otros contribuyan con sus

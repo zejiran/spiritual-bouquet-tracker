@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { OFFERING_TYPES } from '../constants/offerings';
 import { useApi } from '../hooks/useApi';
 import { Offering, OfferingSummary } from '../types';
+import { formatRamilleteTitle } from '../utils/stringUtils';
 import { AnimatedCounter } from './AnimatedCounter';
 import { Helmet } from './Helmet';
 import { RecipientHeader } from './RecipientHeader';
@@ -230,17 +231,7 @@ export const ViewRamillete: React.FC = () => {
     <div className="w-full max-w-5xl mx-auto space-y-8">
       {recipientName && (
         <Helmet
-          title={`Ramillete ${
-            recipientName.startsWith('la ') ||
-            recipientName.startsWith('el ') ||
-            recipientName.startsWith('las ') ||
-            recipientName.startsWith('los ') ||
-            recipientName.includes(' y ') ||
-            recipientName.includes(' e ') ||
-            recipientName.includes(', ')
-              ? 'por'
-              : 'para'
-          } ${recipientName} | Ramillete Espiritual`}
+          title={`${formatRamilleteTitle(recipientName)} | Ramillete Espiritual`}
           description={`Contribuye con tus oraciones al ramillete espiritual para ${recipientName}. Ya hay ${offerings.length} ofrendas.`}
           image={offerings.find((o) => o.imageUrl)?.imageUrl}
           url={window.location.href}
