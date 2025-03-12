@@ -1,0 +1,17 @@
+{
+  "name": "Ramillete Espiritual",
+  "short_name": "Ramillete",
+  "description": "Crea y comparte ramilletes espirituales con oraciones, sacrificios y buenas obras por intenciones especiales.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
