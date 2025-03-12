@@ -12,8 +12,18 @@ export const InstallPrompt: React.FC = () => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [recentRamilletesCount, setRecentRamilletesCount] = useState(0);
 
   useEffect(() => {
+    try {
+      const recentRamilletesStr =
+        localStorage.getItem('recentRamilletes') || '[]';
+      const ramilletes = JSON.parse(recentRamilletesStr);
+      setRecentRamilletesCount(ramilletes.length);
+    } catch (error) {
+      console.error('Error loading recent ramilletes:', error);
+    }
+
     const checkMobileView = () => {
       const isMobile = window.matchMedia('(max-width: 767px)').matches;
       setIsMobileView(isMobile);
@@ -51,8 +61,9 @@ export const InstallPrompt: React.FC = () => {
 
       const dismissedTime = localStorage.getItem('installPromptDismissed');
       if (
-        !dismissedTime ||
-        Date.now() - parseInt(dismissedTime) > 1000 * 60 * 60 * 24 * 3
+        recentRamilletesCount > 2 &&
+        (!dismissedTime ||
+          Date.now() - parseInt(dismissedTime) > 1000 * 60 * 60 * 24 * 3)
       ) {
         setShowBanner(true);
       }
@@ -67,7 +78,7 @@ export const InstallPrompt: React.FC = () => {
         handleBeforeInstallPrompt
       );
     };
-  }, []);
+  }, [recentRamilletesCount]);
 
   const handleInstall = async () => {
     if (!installPrompt) return;
@@ -98,7 +109,8 @@ export const InstallPrompt: React.FC = () => {
     localStorage.setItem('installPromptDismissed', Date.now().toString());
   };
 
-  if (isInstalled || !showBanner || !isMobileView) return null;
+  if (isInstalled || !showBanner || !isMobileView || recentRamilletesCount <= 2)
+    return null;
 
   return (
     <motion.div
