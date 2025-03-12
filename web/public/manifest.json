@@ -13,5 +13,14 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "url_handlers": [
+    {
+      "origin": "https://spiritual-bouquet-tracker.pages.dev"
+    }
+  ],
+  "capture_links": "existing-client-navigation",
+  "scope_extensions": [
+    { "origin": "https://spiritual-bouquet-tracker.pages.dev" }
   ]
 }
