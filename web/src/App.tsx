@@ -7,11 +7,11 @@ import { Footer } from './components/Footer';
 import { Home } from './components/Home';
 import { NotFound } from './components/NotFound';
 import { ViewRamillete } from './components/ViewRamillete';
-import { registerServiceWorker } from './registerSW';
+import { unregisterServiceWorker } from './registerSW';
 
 const App: React.FC = () => {
   useEffect(() => {
-    registerServiceWorker();
+    unregisterServiceWorker();
   }, []);
 
   return (
